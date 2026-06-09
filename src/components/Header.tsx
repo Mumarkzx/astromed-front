@@ -15,6 +15,7 @@ export default function Header() {
           <Link to="/integrantes" className="hover:text-blue-400 transition-colors">Integrantes</Link>
           <Link to="/faq" className="hover:text-blue-400 transition-colors">FAQ</Link>
           <Link to="/sobre" className="hover:text-blue-400 transition-colors">Sobre</Link>
+          <Link to="/contato" className="hover:text-blue-400 transition-colors">Contato</Link>
         </div>
       </div>
     </nav>
