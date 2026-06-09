@@ -1,16 +1,44 @@
-# React + Vite
+# 🚀 AstroMed - Global Solution FIAP 2026
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AstroMed é uma plataforma de monitoramento de saúde e gestão de tripulação desenvolvida para ambientes extremos, conectando os desafios da economia espacial com inovações tecnológicas aplicadas à medicina e à infraestrutura de dados na Terra.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🔗 Links do Projeto
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* 🌐 **Deploy na Vercel:** [COLE_AQUI_O_LINK_DA_VERCEL]
+* ▶️ **Vídeo de Demonstração (YouTube):** [COLE_AQUI_O_LINK_DO_YOUTUBE]
+* 📂 **Repositório GitHub:** [COLE_AQUI_O_LINK_DO_GITHUB]
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tecnologias Utilizadas
+
+O ecossistema da aplicação foi planejado com foco em performance, tipagem estática e componentização:
+
+### Front-End (Interface & Navegação)
+* **React** - Biblioteca base para a construção da interface SPA.
+* **Vite** - Build tool de alta performance para o ambiente de desenvolvimento.
+* **TypeScript** - Arquitetura de código robusta com tipagem estática.
+* **Tailwind CSS** - Estilização moderna e responsiva baseada em utilitários.
+* **React Router DOM** - Gerenciamento dinâmico de rotas de navegação.
+
+### Back-End & Persistência (Integração)
+* **Java** - Arquitetura robusta para processamento de regras de negócios e APIs.
+* **Oracle Database** - Armazenamento relacional seguro dos históricos médicos e dados da tripulação.
+
+---
+
+## 📂 Estrutura de Pastas (Front-End)
+
+A organização do código segue o padrão de separação de responsabilidades e reutilização de componentes:
+
+```text
+📦 src
+ ┣ 📂 components     # Componentes de interface (Ex: Layout, Navbar)
+ ┣ 📂 data           # Arquivos de dados estáticos e mockados (Ex: integrantes.ts)
+ ┣ 📂 pages          # Telas principais (Home, Integrantes, Contato, Perfil)
+ ┣ 📂 routes         # Configuração do ecossistema de rotas (AppRoutes.tsx)
+ ┣ 📜 main.tsx       # Ponto de entrada do ecossistema React
+ ┗ 📜 index.css      # Estilos globais e injeção do Tailwind CSS
