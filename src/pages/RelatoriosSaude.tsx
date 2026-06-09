@@ -3,116 +3,152 @@ import api from '../services/api';
 
 interface Relatorio {
   id: number;
-  frequenciaCardiaca: string;
-  pressaoArterial: string;
+  frequenciaCardiaca: number;
+  pressaoArterial: number;
   observacoes: string;
 }
 
-function RelatoriosSaude() {
+export default function RelatoriosSaude() {
   const [relatorios, setRelatorios] = useState<Relatorio[]>([]);
   const [frequencia, setFrequencia] = useState('');
   const [pressao, setPressao] = useState('');
   const [observacoes, setObservacoes] = useState('');
   const [salvando, setSalvando] = useState(false);
+  const [editandoId, setEditandoId] = useState<number | null>(null);
 
   useEffect(() => {
     carregarRelatorios();
   }, []);
 
   function carregarRelatorios() {
-    api.get('/relatorios-saude')
+    api.get('/relatorios')
       .then(dados => setRelatorios(dados))
-      .catch(error => console.error("Erro ao buscar relatórios médicos:", error));
+      .catch(error => console.error("Erro ao buscar:", error));
   }
 
-  function cadastrarRelatorio(e: any) {
+  function salvarRelatorio(e: any) {
     e.preventDefault();
     setSalvando(true);
     
-    const novoRelatorio = { 
-      frequenciaCardiaca: frequencia, 
-      pressaoArterial: pressao, 
+    const payload = { 
+      frequenciaCardiaca: parseFloat(frequencia), 
+      pressaoArterial: parseFloat(pressao), 
       observacoes: observacoes 
     };
 
-    api.post('/relatorios-saude', novoRelatorio)
-      .then(() => {
-        alert("Relatório médico salvo com sucesso!");
-        carregarRelatorios();
-        setFrequencia('');
-        setPressao('');
-        setObservacoes('');
-      })
-      .catch(error => console.error("Erro ao cadastrar relatório:", error))
-      .finally(() => setSalvando(false));
+    if (editandoId) {
+      api.put(`/relatorios/${editandoId}`, payload)
+        .then(() => { alert("Registro atualizado!"); finalizarAcao(); })
+        .catch(error => console.error("Erro ao atualizar:", error))
+        .finally(() => setSalvando(false));
+    } else {
+      api.post('/relatorios', payload)
+        .then(() => { alert("Registrado com sucesso!"); finalizarAcao(); })
+        .catch(error => console.error("Erro ao cadastrar:", error))
+        .finally(() => setSalvando(false));
+    }
+  }
+
+  function deletarRelatorio(id: number) {
+    if (window.confirm("Certeza que deseja excluir este registro médico?")) {
+      api.delete(`/relatorios/${id}`)
+        .then(() => carregarRelatorios());
+    }
+  }
+
+  function prepararEdicao(rel: Relatorio) {
+    setEditandoId(rel.id);
+    setFrequencia(rel.frequenciaCardiaca.toString());
+    setPressao(rel.pressaoArterial.toString());
+    setObservacoes(rel.observacoes);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function finalizarAcao() {
+    carregarRelatorios();
+    setFrequencia(''); setPressao(''); setObservacoes(''); setEditandoId(null);
   }
 
   return (
     <div className="max-w-6xl mx-auto">
-      <h2 className="text-3xl font-extrabold text-slate-800 mb-8 tracking-tight">❤️ Relatórios de Saúde</h2>
+      <div className="mb-8 border-b border-slate-200 pb-4">
+        <h2 className="text-3xl font-extrabold text-slate-800 tracking-tight">❤️ Telemetria de Saúde</h2>
+        <p className="text-slate-500 mt-2">Monitoramento de sinais vitais e registros médicos em órbita.</p>
+      </div>
       
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-10">
-        <h3 className="text-xl font-semibold text-slate-700 mb-5 border-b pb-2">Registrar Nova Avaliação Médica</h3>
-        <form onSubmit={cadastrarRelatorio} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+      {/* Visual idêntico às outras páginas */}
+      <div className={`p-6 rounded-xl shadow-sm border mb-10 transition-colors ${editandoId ? 'bg-blue-50 border-blue-300' : 'bg-white border-slate-200'}`}>
+        <div className="flex justify-between items-center mb-5">
+          <h3 className="text-lg font-bold text-slate-700">
+            {editandoId ? `✏️ Alterando Registro Médico #${editandoId}` : '🩺 Novo Registro Médico'}
+          </h3>
+          {editandoId && (
+            <button type="button" onClick={finalizarAcao} className="text-sm text-slate-500 hover:text-slate-700 underline">Cancelar</button>
+          )}
+        </div>
+
+        <form onSubmit={salvarRelatorio} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-slate-600 mb-1">Frequência Cardíaca (bpm)</label>
-            <input type="text" placeholder="ex: 75 bpm" value={frequencia} onChange={(e: any) => setFrequencia(e.target.value)} required 
-              className="p-2 border border-slate-300 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all" />
+            <label className="text-sm font-semibold text-slate-600 mb-1">Freq. Cardíaca</label>
+            <input type="number" step="0.1" value={frequencia} onChange={(e) => setFrequencia(e.target.value)} required 
+              className="p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
           </div>
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-slate-600 mb-1">Pressão Arterial</label>
-            <input type="text" placeholder="ex: 120/80 mmHg" value={pressao} onChange={(e: any) => setPressao(e.target.value)} required 
-              className="p-2 border border-slate-300 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all" />
+            <label className="text-sm font-semibold text-slate-600 mb-1">Pressão Arterial</label>
+            <input type="number" step="0.1" value={pressao} onChange={(e) => setPressao(e.target.value)} required 
+              className="p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
           </div>
-          <div className="flex flex-col md:col-span-2">
-            <label className="text-sm font-medium text-slate-600 mb-1">Observações Médicas</label>
-            <input type="text" placeholder="Sintomas, medicações ou estado geral..." value={observacoes} onChange={(e: any) => setObservacoes(e.target.value)} required 
-              className="p-2 border border-slate-300 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all" />
+          <div className="flex flex-col">
+            <label className="text-sm font-semibold text-slate-600 mb-1">Observações</label>
+            <input type="text" value={observacoes} onChange={(e) => setObservacoes(e.target.value)} required 
+              className="p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
           </div>
-          
-          <button type="submit" disabled={salvando} 
-            className={`font-semibold py-2 px-4 rounded transition-colors shadow-sm h-[42px] text-white flex justify-center items-center md:col-span-4
-              ${salvando ? 'bg-slate-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}>
-            {salvando ? (
-              <span className="flex items-center gap-2">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
-                Transmitindo Dados...
-              </span>
-            ) : 'Salvar Relatório Médico'}
+          <button type="submit" disabled={salvando}
+            className={`font-bold py-2.5 px-4 rounded-lg text-white ${editandoId ? 'bg-blue-600' : 'bg-slate-800'}`}>
+            {salvando ? 'Salvando...' : editandoId ? 'Atualizar' : 'Salvar Registro'}
           </button>
         </form>
       </div>
 
-      {relatorios.length === 0 ? (
-        <div className="bg-yellow-50 text-yellow-800 p-4 rounded border border-yellow-200">
-          Nenhum relatório de saúde registrado até o momento.
-        </div>
-      ) : (
-        <div className="overflow-hidden rounded-xl shadow-sm border border-slate-200 bg-white">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-800 text-white">
-                <th className="p-4 font-medium">ID</th>
-                <th className="p-4 font-medium">Frequência Cardíaca</th>
-                <th className="p-4 font-medium">Pressão Arterial</th>
-                <th className="p-4 font-medium">Observações</th>
+      <div className="overflow-hidden rounded-xl shadow-sm border border-slate-200 bg-white">
+        <table className="w-full text-left">
+          <thead className="bg-slate-50 border-b text-sm uppercase text-slate-600">
+            <tr>
+              <th className="p-4">ID</th>
+              <th className="p-4">Frequência</th>
+              <th className="p-4">Pressão</th>
+              <th className="p-4">Obs</th>
+              <th className="p-4 text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y">
+            {relatorios.map(r => (
+              <tr key={r.id} className="hover:bg-slate-50">
+                <td className="p-4 font-mono text-slate-400">#{r.id}</td>
+                <td className="p-4 font-bold text-slate-800">{r.frequenciaCardiaca} bpm</td>
+                <td className="p-4 text-slate-600">{r.pressaoArterial}</td>
+                <td className="p-4 text-slate-600">{r.observacoes}</td>
+                <td className="p-4 flex gap-2 justify-center">
+                  <button
+                    type="button"
+                    onClick={() => prepararEdicao(r)}
+                    className="text-sm px-3 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => deletarRelatorio(r.id)}
+                    className="text-sm px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition"
+                  >
+                    Excluir
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200">
-              {relatorios.map(relatorio => (
-                <tr key={relatorio.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="p-4 font-mono text-sm text-slate-500">{relatorio.id}</td>
-                  <td className="p-4 font-medium text-slate-800">{relatorio.frequenciaCardiaca}</td>
-                  <td className="p-4 text-slate-600">{relatorio.pressaoArterial}</td>
-                  <td className="p-4 text-slate-600">{relatorio.observacoes}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
-
-export default RelatoriosSaude;
