@@ -7,9 +7,9 @@ AstroMed é uma plataforma de monitoramento de saúde e gestão de tripulação 
 ## 🔗 Links do Projeto
 
 
-* 🌐 **Deploy na Vercel:** [COLE_AQUI_O_LINK_DA_VERCEL]
+* 🌐 **Deploy na Vercel:** [astromed-front.vercel.app]
 * ▶️ **Vídeo de Demonstração (YouTube):** [COLE_AQUI_O_LINK_DO_YOUTUBE]
-* 📂 **Repositório GitHub:** [COLE_AQUI_O_LINK_DO_GITHUB]
+* 📂 **Repositório GitHub:** [https://github.com/Mumarkzx/astromed-front.git]
 
 ---
 
