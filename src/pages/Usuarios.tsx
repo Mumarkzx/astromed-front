@@ -26,7 +26,7 @@ function Usuarios() {
       .catch(error => console.error("Erro ao buscar usuários:", error));
   }
 
-  // NOVO: Função que junta o POST (Criar) e o PUT (Atualizar)
+
   function salvarUsuario(e: any) {
     e.preventDefault();
     setSalvando(true);
@@ -34,7 +34,7 @@ function Usuarios() {
     const payload = { nome, email, funcao };
 
     if (editandoId) {
-      // Faz o PUT se estiver editando
+  
       api.put(`/usuarios/${editandoId}`, payload)
         .then(() => {
           alert("Tripulante atualizado com sucesso!");
@@ -43,7 +43,7 @@ function Usuarios() {
         .catch(error => console.error("Erro ao atualizar:", error))
         .finally(() => setSalvando(false));
     } else {
-      // Faz o POST se for um novo
+
       api.post('/usuarios', payload)
         .then(() => {
           alert("Tripulante cadastrado com sucesso!");
@@ -54,7 +54,6 @@ function Usuarios() {
     }
   }
 
-  // NOVO: Função de DELETE
   function deletarUsuario(id: number) {
     if (window.confirm("Atenção: Tem certeza que deseja excluir este tripulante permanentemente?")) {
       api.delete(`/usuarios/${id}`)
@@ -66,16 +65,16 @@ function Usuarios() {
     }
   }
 
-  // NOVO: Prepara o formulário para edição
+
   function prepararEdicao(usuario: Usuario) {
     setEditandoId(usuario.id);
     setNome(usuario.nome);
     setEmail(usuario.email);
     setFuncao(usuario.funcao);
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Rola para o topo
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
   }
 
-  // Limpa o formulário após salvar
+
   function finalizarAcao() {
     carregarUsuarios();
     setNome('');
@@ -161,7 +160,7 @@ function Usuarios() {
                     <button onClick={() => prepararEdicao(usuario)} className="bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm font-semibold hover:bg-blue-200 transition">
                       Editar
                     </button>
-                    {/* Botão de Excluir (DELETE) */}
+
                     <button onClick={() => deletarUsuario(usuario.id)} className="bg-red-100 text-red-700 px-3 py-1 rounded text-sm font-semibold hover:bg-red-200 transition">
                       Excluir
                     </button>

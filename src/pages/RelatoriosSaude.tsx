@@ -76,7 +76,7 @@ export default function RelatoriosSaude() {
         <p className="text-slate-500 mt-2">Monitoramento de sinais vitais e registros médicos em órbita.</p>
       </div>
       
-      {/* Visual idêntico às outras páginas */}
+
       <div className={`p-6 rounded-xl shadow-sm border mb-10 transition-colors ${editandoId ? 'bg-blue-50 border-blue-300' : 'bg-white border-slate-200'}`}>
         <div className="flex justify-between items-center mb-5">
           <h3 className="text-lg font-bold text-slate-700">

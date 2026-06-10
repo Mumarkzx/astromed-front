@@ -10,7 +10,7 @@ export default function Contato() {
     e.preventDefault();
     setEnviando(true);
 
-    // Simulação de envio da mensagem
+   
     setTimeout(() => {
       alert("Mensagem enviada com sucesso! A equipa AstroMed responderá em breve.");
       setNome("");
@@ -22,7 +22,7 @@ export default function Contato() {
 
   return (
     <div className="max-w-6xl mx-auto p-4 animate-in fade-in duration-500">
-      {/* Cabeçalho da Página */}
+
       <section className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 mb-8">
         <h2 className="text-3xl font-extrabold text-slate-800 mb-2 tracking-tight">📬 Contato</h2>
         <p className="text-slate-600">Tem dúvidas, críticas ou sugestões? Entra em contacto com a equipa de suporte da AstroMed.</p>

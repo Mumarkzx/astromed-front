@@ -84,7 +84,6 @@ function Missoes() {
         <p className="text-slate-500 mt-2">Controle operacional e rastreamento de lançamentos (CRUD Completo).</p>
       </div>
       
-      {/* O fundo agora fica azul claro na edição, igual à página de Tripulação */}
       <div className={`p-6 rounded-xl shadow-sm border mb-10 transition-colors ${editandoId ? 'bg-blue-50 border-blue-300' : 'bg-white border-slate-200'}`}>
         <div className="flex justify-between items-center mb-5">
           <h3 className="text-lg font-bold text-slate-700">
@@ -157,7 +156,6 @@ function Missoes() {
                     </span>
                   </td>
                   <td className="p-4 flex justify-center gap-2">
-                    {/* Botão de Editar agora na cor azul */}
                     <button onClick={() => prepararEdicao(missao)} className="bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm font-semibold hover:bg-blue-200 transition">
                       Editar
                     </button>
