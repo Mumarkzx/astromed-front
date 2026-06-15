@@ -1,4 +1,4 @@
-// Coloque aqui a URL e a porta onde o seu Java/Quarkus está rodando
+
 const BASE_URL = 'https://astromed-api.onrender.com'; 
 
 const api = {
